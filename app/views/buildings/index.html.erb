@@ -1,60 +1,43 @@
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="/">NYC Building Energy Usage Per Year 2008 - 2012</a>
-    </div>
+<div class="container">
+  <h2>NYC Building Energy Usage Per Year 2008 - 2012</h2>
+  <div class="form">
+    <%= form_tag "/", method: :get do %>
+    <strong>Year</strong>
+      <select name="year">
+        <%= @years.each do |year| %>
+          <option value="<%= year %>" <%= "selected" if params[:year] == year %>><%= year %></option>
+        <% end %>
+      </select>
+      <input type="submit" value="Submit" class="btn btn-sm btn-primary">
+    <% end %>
+  </div>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav navbar-right">
-        <li></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Year<span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="/energy_usage?year=2008">2008</a></li>
-            <li><a href="/energy_usage?year=2009">2009</a></li>
-            <li><a href="/energy_usage?year=2010">2010</a></li>
-            <li><a href="/energy_usage?year=2011">2011</a></li>
-            <li><a href="/energy_usage?year=2012">2012</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
+  <br>
 
-
-<!-- <div class="col-md-2 dropdown"> -->
-<table class="table">
-  <thead>
-    <tr class="active table-head">
-      <td>Building</td>
-      <td>Year</td>
-      <% @measurements.each do |measurement| %>
-        <td><%= measurement %></td>
-      <% end %>
-    </tr>
-  </thead>
-  <tbody>
-    <% @locations.each do |location| %>
-      <tr>
-        <td><%= location %></td>
-        <td><%= @year %></td>
+  <table class="table">
+    <thead>
+      <tr class="active table-head">
+        <td>Building</td>
+        <td>Year</td>
         <% @measurements.each do |measurement| %>
-          <% if Energy.find_by(location: location, year: @year, measurement: measurement) %>
-            <td><%= number_to_currency(Energy.find_by(location: location, year: @year, measurement: measurement).amount) %></td>
-          <% else %>
-            <td>0.0</td>
-          <% end %>
+          <td><%= measurement %></td>
         <% end %>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @locations.each do |location| %>
+        <tr>
+          <td><%= location %></td>
+          <td><%= @year %></td>
+          <% @measurements.each do |measurement| %>
+            <% if Energy.find_by(location: location, year: @year, measurement: measurement) %>
+              <td><%= number_to_currency(Energy.find_by(location: location, year: @year, measurement: measurement).amount) %></td>
+            <% else %>
+              <td>0.0</td>
+            <% end %>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
