@@ -27,7 +27,7 @@
     <tbody>
       <% @locations.each do |location| %>
         <tr>
-          <td><%= location %></td>
+          <td><%= testing testing %></td>
           <td><%= @year %></td>
           <% @measurements.each do |measurement| %>
             <% if Energy.find_by(location: location, year: @year, measurement: measurement) %>
